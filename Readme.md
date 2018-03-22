@@ -42,5 +42,7 @@ $ dotnet run
 ## Demo
 
 Here are some sample images of it running:
+
 ![the menu](https://github.com/philipwerner/Lab02-Unit-Testing/blob/lab02-phil/Assets/menu.png)
+
 ![deposit and withdraw](https://github.com/philipwerner/Lab02-Unit-Testing/blob/lab02-phil/Assets/working.png)
