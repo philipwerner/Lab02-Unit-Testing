@@ -6,11 +6,12 @@ namespace BankATM
     {
         static void Main(string[] args)
         {
+            decimal balance = 2000M;
             Console.WriteLine("Welcome To Your Money");
-            UserInterface();
+            UserInterface(balance);
         }
 
-        public static void UserInterface()
+        public static void UserInterface(decimal balance)
         {
             Console.WriteLine("1. View Balance");
             Console.WriteLine("2. Make a Withdrawl");
@@ -20,45 +21,45 @@ namespace BankATM
             try
             {
                 byte choice = Convert.ToByte(Console.ReadLine());
-                HandleOption(choice);
+                HandleOption(choice, balance);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
+            
         }
 
-        public static void HandleOption(byte val)
+        public static void HandleOption(byte val, decimal balance)
         {
+
             if (val == 1)
             {
-                ViewBalance();
+                decimal bal = ViewBalance(balance);
+                string displayBalance = bal.ToString();
+                Console.WriteLine($"Your available balance is ${displayBalance}.");
+                UserInterface(bal);
             }
             if (val == 2)
             {
+                //PromptWithdrawl(balance);
                 try
                 {
-                    Console.WriteLine("How much money you want: ");
-                    int withdrawl = Convert.ToInt32(Console.ReadLine());
-                    MakeWithdrawl(withdrawl);
+                    Console.WriteLine("How much would you like to withdrawl?");
+                    decimal withdrawl = Convert.ToDecimal(Console.ReadLine());
+                    decimal currentBalance = MakeWithdrawl(withdrawl, balance);
+                    UserInterface(currentBalance);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Please enter a valid amout.");
+                    HandleOption(val, balance);
                 }
             }
             if (val == 3)
             {
-                try
-                {
-                    Console.WriteLine("How much do you wish to deposit: ");
-                    int deposit = Convert.ToInt32(Console.ReadLine());
-                    MakeDeposit(deposit);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+                PromptDeposit(balance);
+                UserInterface(balance);
             }
             if (val == 0)
             {
@@ -66,56 +67,67 @@ namespace BankATM
             }
         }
 
-        public static string BalanceMath(string x, int val)
+        public static void PromptWithdrawl(decimal balance)
         {
-            int balance = 2000;
-            int amount = val;
-            if (x == "+")
+            try
             {
-                balance = balance + amount;
-                return balance.ToString();
+                Console.WriteLine("How much would you like to withdrawl?");
+                decimal withdrawl = Convert.ToDecimal(Console.ReadLine());
+                MakeWithdrawl(withdrawl, balance);
             }
-            if (x == "-")
+            catch (Exception)
             {
-                balance = balance - amount;
-                return balance.ToString();
+                Console.WriteLine("Please enter a valid amout.");
+                PromptWithdrawl(balance);
             }
-            return " ";
-
         }
 
-
-        public static void ViewBalance()
+        public static void PromptDeposit(decimal balance)
         {
-            string balance = BalanceMath("+", 0);
-            Console.WriteLine("Your available balance is $" + balance + ".");
-            UserInterface();
+            try
+            {
+                Console.WriteLine("How much would you like to deposit?");
+                decimal deposit = Convert.ToDecimal(Console.ReadLine());
+                MakeDeposit(deposit, balance);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Please enter a valid amout.");
+                PromptDeposit(balance);
+            }
         }
 
-        public static void MakeWithdrawl(int val)
+        public static decimal ViewBalance(decimal balance)
         {
-            int result = Convert.ToInt32(BalanceMath("-", val));
-            if (result < 0)
+            return balance;
+        }
+
+        public static decimal MakeWithdrawl(decimal amount, decimal balance)
+        {
+            decimal newBalance = balance - amount;
+            if (newBalance < 0)
             {
                 Console.WriteLine("Insufficient Funds");
-                Console.WriteLine($"Your balance is ${result}");
-                BalanceMath("+", val);
-                UserInterface();
+                Console.WriteLine($"Your balance is currently ${balance}");
+                Console.WriteLine("Transaction has been terminated");
+
+                return balance;
             }
-            if (result > -1)
+            if (newBalance > -1)
             {
-                Console.WriteLine($"Your balance is now ${result}");
-                UserInterface();
+                Console.WriteLine($"Your balance is now ${newBalance}");
             }
             
-        }
+            return newBalance;
 
-        public static void MakeDeposit(int val)
+        }
+            
+        public static decimal MakeDeposit(decimal deposit, decimal balance)
         {
-            int balance = Convert.ToInt32(BalanceMath("+", 0));
-            int result = Convert.ToInt32(BalanceMath("+", val));
-            Console.WriteLine($"Your balance is now ${result}");
-            UserInterface();
+            decimal newBalance = deposit + balance;
+            Console.WriteLine($"Your balance is now ${newBalance}");
+            return newBalance;
+
         }
     }
 }
