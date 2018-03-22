@@ -42,7 +42,6 @@ namespace BankATM
             }
             if (val == 2)
             {
-                //PromptWithdrawl(balance);
                 try
                 {
                     Console.WriteLine("How much would you like to withdrawl?");
@@ -58,42 +57,22 @@ namespace BankATM
             }
             if (val == 3)
             {
-                PromptDeposit(balance);
-                UserInterface(balance);
+                try
+                {
+                    Console.WriteLine("How much would you like to deposit?");
+                    decimal deposit = Convert.ToDecimal(Console.ReadLine());
+                    decimal currentBalance = MakeDeposit(deposit, balance);
+                    UserInterface(currentBalance);
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Please enter a valid amout.");
+                    HandleOption(val, balance);
+                }
             }
             if (val == 0)
             {
                 Console.WriteLine("Have A Nice Day");
-            }
-        }
-
-        public static void PromptWithdrawl(decimal balance)
-        {
-            try
-            {
-                Console.WriteLine("How much would you like to withdrawl?");
-                decimal withdrawl = Convert.ToDecimal(Console.ReadLine());
-                MakeWithdrawl(withdrawl, balance);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Please enter a valid amout.");
-                PromptWithdrawl(balance);
-            }
-        }
-
-        public static void PromptDeposit(decimal balance)
-        {
-            try
-            {
-                Console.WriteLine("How much would you like to deposit?");
-                decimal deposit = Convert.ToDecimal(Console.ReadLine());
-                MakeDeposit(deposit, balance);
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Please enter a valid amout.");
-                PromptDeposit(balance);
             }
         }
 

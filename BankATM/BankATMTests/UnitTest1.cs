@@ -8,24 +8,35 @@ namespace BankATMTests
 {
     public class UnitTest1
     {
-        [Fact]
-        public void CanViewBalance()
+        [Theory]
+        [InlineData(3500, 3500)]
+        [InlineData(500, 500)]
+        [InlineData(300, 300)]
+        [InlineData(35, 35)]
+        public void CanViewBalance(decimal testBalance, decimal testResult)
         {
-            Assert.Equal("2000", BalanceMath("+", 0));
+            Assert.Equal(testResult, ViewBalance(testBalance));
+        }
+        
+        [Theory]
+        [InlineData(50, 500, 450)]
+        [InlineData(150, 1500, 1350)]
+        [InlineData(500, 500, 0)]
+        [InlineData(250, 5500, 5250)]
+        public void CanWithdrawMoney(decimal testAmount, decimal testBalance, decimal testResult)
+        {
+            Assert.Equal(testResult, MakeWithdrawl(testAmount, testBalance));
         }
 
-        [Fact]
-        public void CanAddToBalance()
+        [Theory]
+        [InlineData(500, 500, 1000)]
+        [InlineData(150, 500, 650)]
+        [InlineData(500, 0, 500)]
+        [InlineData(250, 3500, 3750)]
+        public void CanDepositMoney(decimal testAmount, decimal testBalance, decimal testResult)
         {
-            Assert.Equal("2500", BalanceMath("+", 500));
+            Assert.Equal(testResult, MakeDeposit(testAmount, testBalance));
         }
-
-        [Fact]
-        public void CanSubtractFromBalance()
-        {
-            Assert.Equal("1500", BalanceMath("-", 500));
-        }
-
 
     }
 }
